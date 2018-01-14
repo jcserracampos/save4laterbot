@@ -12,13 +12,15 @@ db.exec "CREATE TABLE IF NOT EXISTS Links(Link VARCHAR(255), Author VARCHAR(30),
 
 Telegram::Bot::Client.run(token) do |bot|
     bot.listen do |message|
-        links = message.text.split(/\s+/).find_all { |u| u =~ /^https?:/ }
+        if message.text
+            links = message.text.split(/\s+/).find_all { |u| u =~ /^https?:/ }
 
-        if !links.nil?
-            links.each do |link|
-                db.exec "INSERT INTO Links VALUES('#{link}', '#{message.from.username}', '#{message.chat.title}')"
+            if !links.nil?
+              links.each do |link|
+                    db.exec "INSERT INTO Links VALUES('#{link}', '#{message.from.username}', '#{message.chat.title}')"
+                 end
             end
-        end
+         end
      
     end
 end
