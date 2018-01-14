@@ -1,6 +1,11 @@
 require 'telegram/bot'
+require 'pg'
 
-token = File.read(".telegram_token").strip
+if ENV["MY_TOKEN"]
+    token = ENV["MY_TOKEN"]
+else
+    token = File.read(".telegram_token").strip
+end
 
 Telegram::Bot::Client.run(token) do |bot|
     bot.listen do |message|
