@@ -8,15 +8,15 @@ else
 end
 
 db = PG.connect(ENV["DATABASE_URL"])
+db.exec "CREATE TABLE IF NOT EXISTS Links(Link VARCHAR(255), Author VARCHAR(30), Chat VARCHAR(30))"
 
 Telegram::Bot::Client.run(token) do |bot|
     bot.listen do |message|
-
-        puts message.text
-        puts message.from.username
-        puts message.chat.title
-
-
         links = message.text.split(/\s+/).find_all { |u| u =~ /^https?:/ }
+
+        links.each do |msg|
+            db.exec "INSERT INTO Links VALUES(#{msg.text}, #{msg.from.username}, #{msg.chat.title})"
+        end
+      
     end
 end
