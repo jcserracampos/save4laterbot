@@ -7,6 +7,8 @@ else
     token = File.read(".telegram_token").strip
 end
 
+db = PG.connect(ENV["DATABASE_URL"])
+
 Telegram::Bot::Client.run(token) do |bot|
     bot.listen do |message|
 
