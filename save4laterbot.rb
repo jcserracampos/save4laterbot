@@ -14,9 +14,11 @@ Telegram::Bot::Client.run(token) do |bot|
     bot.listen do |message|
         links = message.text.split(/\s+/).find_all { |u| u =~ /^https?:/ }
 
-        links.each do |link|
-            db.exec "INSERT INTO Links VALUES('#{link}', '#{message.from.username}', '#{message.chat.title}')"
+        if !links.nil?
+            links.each do |link|
+                db.exec "INSERT INTO Links VALUES('#{link}', '#{message.from.username}', '#{message.chat.title}')"
+            end
         end
-      
+     
     end
 end
